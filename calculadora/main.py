@@ -3,7 +3,7 @@ import sys
 from mywindow import UiMyWindow
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QWidget, QApplication
 import sys
-from button import Button
+
 
 class MyWindow(QMainWindow):
     def __init__(self, parent:QWidget | None=None, *args, **kwargs) -> None:
@@ -17,7 +17,7 @@ class MyWindow(QMainWindow):
 
     def adjustfixedSize(self):
         self.adjustSize()
-        self.setFixedSize(300, 370)
+        self.setFixedSize(320, 390)
         
       
             
