@@ -162,8 +162,7 @@ class UiMyWindow(object):
         self.op= ['+', '-', '*', '/', '^','%']
         if text  in self.op:
             self.op_(text)
-            if self.left is not None:
-              self.equacao()
+          
         
         if text =='=':
             self.equacao()
