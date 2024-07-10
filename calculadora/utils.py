@@ -15,8 +15,6 @@ def isInteger(string:str):
         number=int(number)
     return number
 
-
-
 def isValidNumber(string:str):
 
     try:
