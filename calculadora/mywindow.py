@@ -13,7 +13,7 @@ class UiMyWindow(object):
         self.left=None
         self.right=None
         self.result=None
-        self.sol=True
+        self.new_input = True
         # Central Widget
         self.centralwidget = QWidget(parent)
         self.centralwidget.setObjectName("centralwidget")
@@ -148,24 +148,32 @@ class UiMyWindow(object):
         if not isValidNumber(self.display_.text()) and self.left is None:
                 print('Não há calculos para fazer')
                 return
-            
+        
         self.operato=text
         self.left = self.display_.text()
         self.display_.clear()
-              
+        self.new_input = True
        
+    
     def presedInsertDisplay(self,text):
-       
+        if self.new_input:
+            self.display_.clear()
+            self.new_input = False
+            
         if isnumordot(text):
             self.display_.insert(text)
        
         self.op= ['+', '-', '*', '/', '^','%']
-        if text  in self.op:
+        if text  in self.op and self.left is None:
+            
             self.op_(text)
-          
+        if text  in self.op and  isValidNumber(self.display_.text()):
+            
+            self.equacao(text)
         
-        if text =='=':
-            self.equacao()
+        if text =='=' :
+            
+            self.equacao(text)
             
         if 'N' in text:
             self.isNegative()
@@ -194,39 +202,34 @@ class UiMyWindow(object):
          self.display_.setFocus()
              
 
-    def equacao(self):
+    def equacao(self,text):
         if not isValidNumber(self.display_.text()) and self.left is None:
                 print('Não há calculos para fazer')
                 return
-        
+     
            
         self.right=  self.display_.text()
         
-        if self.operato=='+':
-            self.result= float(self.left)+float(self.right)
-            
-            self.display_.setText(str(self.result))
-        if self.operato=='-':
-            self.result= float(self.left)-float(self.right)
-            self.display_.setText(str(self.result))
-            print(self.result)
-        if self.operato=='*':
-            self.result= float(self.left)*float(self.right)
-            self.display_.setText(str(self.result))
-            print(self.result)
-        if self.operato=='/':
-            self.result= float(self.left)/float(self.right)
-            self.display_.setText(str(self.result))
-            print(self.result)
-        if self.operato=='%':
-            self.result= (float(self.left)/float(100))*float(self.right)
-            self.display_.setText(str(self.result))
-            print(self.result)
+        if self.operato == '+':
+            self.result = float(self.left) + float(self.right)
+        elif self.operato == '-':
+            self.result = float(self.left) - float(self.right)
+        elif self.operato == '*':
+            self.result = float(self.left) * float(self.right)
+        elif self.operato == '/':
+            self.result = float(self.left) / float(self.right)
+        elif self.operato == '%':
+            self.result = (float(self.left) / float(100)) * float(self.right)
+        elif self.operato == '^':
+            self.result = float(self.left) ** float(self.right)
         
-        self.left=self.result
-        print(self.left)
-        
+        self.left = self.result
+        self.display_.setText(str(self.result))
+        self.operato= text
+        self.new_input = True
         self.display_.setFocus()
+
+        
         
         
         
