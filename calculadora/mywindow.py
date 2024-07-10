@@ -9,29 +9,27 @@ class UiMyWindow(object):
     
 
     def setup_ui(self, parent):
+        # Inicialização de variáveis de controle
         self.operato=None
         self.left=None
         self.right=None
         self.result=None
         self.new_input = True
-        # Central Widget
+        # Configuração do widget central
         self.centralwidget = QWidget(parent)
         self.centralwidget.setObjectName("centralwidget")
         
-        
+        # Configuração do layout principal
         self.layout =  QGridLayout(self.centralwidget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
+        # Adicionando o display
         self.display_= Display()
-        
         self.layout.addWidget(self.display_, 0, 0, 1, 3)
 
         self.gridLayoutWidget = QWidget(self.centralwidget)
-        
-
-        
-
+        # Configuração do layout dos botões
         self.layout_buttons = QGridLayout(self.gridLayoutWidget)
         self.layout_buttons.setSpacing(0)
         self.layout_buttons.setContentsMargins(0, 0, 0, 0)
@@ -43,7 +41,7 @@ class UiMyWindow(object):
 
         
         parent.setCentralWidget(self.centralwidget)
-   
+    # estilizando os botões
     def stylebutton(self,button):
         qss=f"""
             QPushButton{{
@@ -83,6 +81,7 @@ class UiMyWindow(object):
                  border-width: 6px; border-color:#02735E
          }}
            """
+        # colocando efeito sombra
         sombra= QGraphicsDropShadowEffect()
         sombra.setBlurRadius(7)
         sombra.setXOffset(7)
@@ -96,7 +95,7 @@ class UiMyWindow(object):
              button.setStyleSheet(qss2)
 
  
-        
+    #tratamento de signal ao digitar no teclado
     def configSignal(self):
         self.display_.enterPressed.connect(self.equacao)
         self.display_.backpressed.connect(self._backSpace)
@@ -106,8 +105,8 @@ class UiMyWindow(object):
         
         
     def configButton(self):
-       
-        
+        # Configuração dos botões da calculadora
+        #   
         self.cal=[
             
             ['C','%', '^', '/'],
@@ -133,18 +132,19 @@ class UiMyWindow(object):
                 self.connectButtonClicked(button,slot)
                 
                 
-         
+    
     def Clicked(self,fun,*args,**kwargs):
         def realslot():
             fun(*args,**kwargs)
         return realslot
     
+    # Conectando os botoes ao clicar
     def connectButtonClicked(self,button,slot):
            button.clicked.connect(slot)
 
     
     def op_(self,text):
-
+        # Tratamento de operadores
         if not isValidNumber(self.display_.text()) and self.left is None:
                 print('Não há calculos para fazer')
                 return
@@ -156,36 +156,33 @@ class UiMyWindow(object):
        
     
     def presedInsertDisplay(self,text):
+        # Tratamento de entrada de texto
         if self.new_input:
             self.display_.clear()
             self.new_input = False
             
         if isnumordot(text):
             self.display_.insert(text)
-       
         self.op= ['+', '-', '*', '/', '^','%']
         if text  in self.op and self.left is None:
-            
             self.op_(text)
         if text  in self.op and  isValidNumber(self.display_.text()):
-            
             self.equacao(text)
-        
         if text =='=' :
-            
             self.equacao(text)
-            
         if 'N' in text:
             self.isNegative()
         if 'C' in text:
             self.clear()
 
     def _backSpace(self):
+        # Tratamento de backspace
         self.display_.backspace()
         self.display_.setFocus()
 
 
     def isNegative(self):
+        # Tratamento de números negativos
           displaytext= self.display_.text() 
           if not isValidNumber(displaytext):
             return
@@ -194,14 +191,14 @@ class UiMyWindow(object):
           self.display_.setText(str(number1))
           self.display_.setFocus()
          
-            
+    # Limpeza do display e variáveis     
     def clear(self):
          self.display_.clear()
          self.left=None
          self.right=None
          self.display_.setFocus()
              
-
+    # Tratamento da equação
     def equacao(self,text):
         if not isValidNumber(self.display_.text()) and self.left is None:
                 print('Não há calculos para fazer')
@@ -228,12 +225,7 @@ class UiMyWindow(object):
         self.operato= text
         self.new_input = True
         self.display_.setFocus()
-
-        
-        
-        
-        
-
+    
         
 class Display(QLineEdit):
     enterPressed=pyqtSignal()
@@ -249,7 +241,7 @@ class Display(QLineEdit):
         self.confistyle()
         
 
-
+    # Configuração do estilo do display
     def confistyle(self):
         
         MARGIN=5
